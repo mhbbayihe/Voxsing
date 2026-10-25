@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Écran 5 · Lire la voix (voix → texte). -->
+<ContentPage
+    x:Class="VoxSign.Views.VoiceToTextPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls"
+    xmlns:vm="clr-namespace:VoxSign.ViewModels"
+    x:DataType="vm:VoiceToTextViewModel">
+
+    <Grid RowDefinitions="*,Auto" IgnoreSafeArea="True">
+        <ScrollView>
+            <VerticalStackLayout Padding="24,0,24,24.1" Spacing="0">
+
+                <c:ScreenHeader
+                    Margin="0,61,0,0"
+                    Title="Lire la voix"
+                    Subtitle="Voix → texte · français"
+                    BackCommand="{Binding GoBackCommand}"
+                    ActionIcon="Dots"
+                    ActionText="Options" />
+
+                <!-- État d'écoute -->
+                <Border Style="{StaticResource TintPanel}" StrokeShape="RoundRectangle 28" HeightRequest="263" Margin="0,25,0,0">
+                    <Grid>
+                        <Border Style="{StaticResource Pill}" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,24,0,0" IsVisible="{Binding IsListening}">
+                            <HorizontalStackLayout Spacing="0">
+                                <c:Icon Name="MicSmall" Color="{StaticResource Primary}" Margin="12.4,7.2,0,0" />
+                                <Label Text="Écoute en cours" Style="{StaticResource ChipText}" Margin="8.4,0,10.4,0" />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <Border
+                            Background="{StaticResource Primary}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 38"
+                            WidthRequest="76"
+                            HeightRequest="76"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Start"
+                            Margin="0,67,0,0"
+                            SemanticProperties.Description="{Binding ToggleText}">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ToggleListeningCommand}" />
+                            </Border.GestureRecognizers>
+                            <c:Icon Name="MicRecord" Color="{StaticResource White}" HorizontalOptions="Center" Margin="0,23.3,0,0" />
+                        </Border>
+
+                        <!-- Onde sonore : 13 barres de 6, écartées de 5, centrées sur une bande de 44 -->
+                        <HorizontalStackLayout
+                            Spacing="5"
+                            HeightRequest="44"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Start"
+                            Margin="0,159,0,0"
+                            BindableLayout.ItemsSource="{Binding Levels}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="x:Double">
+                                    <BoxView WidthRequest="6" HeightRequest="{Binding .}" CornerRadius="3" Color="{StaticResource Primary}" VerticalOptions="Center" />
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </HorizontalStackLayout>
+
+                        <Label Text="{Binding StatusText}" FontSize="14" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,220.45,0,0" />
+                    </Grid>
+                </Border>
+
+                <Grid Margin="0,16.55,0,0">
+                    <Label Text="Transcription en direct" Style="{StaticResource Section}" SemanticProperties.HeadingLevel="Level2" />
+                    <Label Text="A+ Agrandir" Style="{StaticResource SectionLink}" VerticalOptions="Start" Margin="0,2.85,0,0">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding EnlargeCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+
+                <Border Style="{StaticResource Card}" MinimumHeightRequest="199" Margin="-1,14.65,-1,0">
+                    <VerticalStackLayout Padding="20,0,20,20" Spacing="0">
+                        <Label
+                            Text="{Binding Transcript}"
+                            FontFamily="InterBold"
+                            FontSize="{Binding TranscriptSize}"
+                            c:Typography.LinePitch="{Binding TranscriptPitch}"
+                            Margin="0,19.55,0,0"
+                            SemanticProperties.Description="Transcription" />
+                        <Border Style="{StaticResource Pill}" Margin="0,16.45,0,0" IsVisible="{Binding IsListening}">
+                            <HorizontalStackLayout Spacing="0">
+                                <c:Icon Name="DotsSmall" Color="{StaticResource Primary}" Margin="11.8,12.4,0,0" />
+                                <Label Text="Texte en cours de mise à jour" Style="{StaticResource ChipText}" Margin="7.9,0,11.1,0" />
+                            </HorizontalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource PrimaryButton}" Margin="0,15,0,0" SemanticProperties.Description="{Binding ToggleText}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ToggleListeningCommand}" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                        <c:Icon Name="Stop" Color="{StaticResource White}" VerticalOptions="Center" Margin="1.2,0,0,0" />
+                        <Label Text="{Binding ToggleText}" Style="{StaticResource ButtonText}" TextColor="{StaticResource White}" Margin="12.3,0,0,0" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,16,0,0">
+                    <Border Style="{StaticResource TintButton}" SemanticProperties.Description="Copier">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CopyCommand}" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                            <c:Icon Name="Copy" Color="{StaticResource Primary}" VerticalOptions="Center" Margin="1.3,0,0,0" />
+                            <Label Text="Copier" Style="{StaticResource ButtonText}" TextColor="{StaticResource Primary}" Margin="11.4,0,0,0" />
+                        </HorizontalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource TintButton}" SemanticProperties.Description="Répondre">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ReplyCommand}" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                            <c:Icon Name="Type" Color="{StaticResource Primary}" VerticalOptions="Center" Margin="2.2,0,0,0" />
+                            <Label Text="Répondre" Style="{StaticResource ButtonText}" TextColor="{StaticResource Primary}" Margin="13.1,0,0,0" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+
+                <c:InfoNote
+                    Variant="Success"
+                    Inset="15"
+                    TextLeft="42"
+                    Text="Une personne à la fois, près du micro. La transcription peut contenir des erreurs."
+                    Margin="0,16,0,0" />
+
+                <Label Text="Exemple de transcription · état d’écoute illustré" FontSize="12" TextColor="{StaticResource Muted}" HorizontalOptions="Center" Margin="0,17.4,0,0" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <c:BottomNav Grid.Row="1" Active="Accueil" Variant="Tinted" Command="{Binding NavigateTabCommand}" />
+    </Grid>
+</ContentPage>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Écran 3 · Accueil (marges latérales 24). -->
+<ContentPage
+    x:Class="VoxSign.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls"
+    xmlns:vm="clr-namespace:VoxSign.ViewModels"
+    x:DataType="vm:HomeViewModel">
+
+    <Grid RowDefinitions="*,Auto" IgnoreSafeArea="True">
+        <ScrollView>
+            <VerticalStackLayout Padding="24,0,24,23" Spacing="0">
+
+                <c:ScreenHeader
+                    Margin="0,61,0,0"
+                    ShowBack="False"
+                    Title="{Binding Greeting}"
+                    TitleImage="wave.png"
+                    Subtitle="VoxSign · à votre rythme"
+                    ActionIcon="User"
+                    ActionText="Profil"
+                    ActionCommand="{Binding OpenProfileCommand}" />
+
+                <Border Style="{StaticResource Photo}" StrokeShape="RoundRectangle 20" HeightRequest="150" Margin="0,25,0,0">
+                    <Image Source="hero.jpg" SemanticProperties.Description="Deux personnes échangent en souriant" />
+                </Border>
+
+                <Grid HeightRequest="27" Margin="0,10,0,0">
+                    <Label Text="Chaque échange compte." FontFamily="InterBold" FontSize="20" Margin="0,1.1,0,0" />
+                    <Border Style="{StaticResource Pill}" HorizontalOptions="End">
+                        <HorizontalStackLayout Spacing="0">
+                            <c:Icon Name="HandSmall" Color="{StaticResource Primary}" Margin="10.6,7.2,0,0" />
+                            <Label Text="LSF" Style="{StaticResource ChipText}" Margin="6.7,0,10.4,0" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+
+                <Label Text="Comment communiquer ?" Style="{StaticResource Section}" Margin="0,16.55,0,0" SemanticProperties.HeadingLevel="Level2" />
+
+                <!-- Modes de communication -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,14.65,0,0">
+                    <Border
+                        Background="{StaticResource Primary}"
+                        StrokeThickness="0"
+                        StrokeShape="RoundRectangle 20"
+                        HeightRequest="150"
+                        Margin="0,1,1,1"
+                        SemanticProperties.Description="Texte vers signes">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenTextToSignCommand}" />
+                        </Border.GestureRecognizers>
+                        <Grid>
+                            <c:Icon Name="TypeLarge" Color="{StaticResource White}" Margin="20.2,20.2,0,0" />
+                            <VerticalStackLayout Margin="16,54.55,16,0" Spacing="0">
+                                <Label Text="Texte → signes" Style="{StaticResource CardTitle}" TextColor="{StaticResource White}" />
+                                <Label Text="Écrire, illustrer et faire lire" FontSize="13" TextColor="{StaticResource OnPrimarySoft}" c:Typography.LinePitch="19" Margin="0,9.65,0,0" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource Card}" HeightRequest="152" Margin="-2,0,-1,0" SemanticProperties.Description="Voix vers texte">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenVoiceToTextCommand}" />
+                        </Border.GestureRecognizers>
+                        <Grid>
+                            <c:Icon Name="MicLarge" Color="{StaticResource Primary}" Margin="21.3,17.8,0,0" />
+                            <VerticalStackLayout Margin="16,54.55,16,0" Spacing="0">
+                                <Label Text="Voix → texte" Style="{StaticResource CardTitle}" />
+                                <Label Text="Lire ce que l’on vous dit" FontSize="13" TextColor="{StaticResource Muted}" c:Typography.LinePitch="19" Margin="0,9.65,0,0" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,14,0,0">
+                    <Border Style="{StaticResource Card}" HeightRequest="152" SemanticProperties.Description="Phrases utiles">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenPhrasesCommand}" />
+                        </Border.GestureRecognizers>
+                        <Grid>
+                            <c:Icon Name="MessageText" Color="{StaticResource Primary}" Margin="17.8,19,0,0" />
+                            <VerticalStackLayout Margin="16,54.55,16,0" Spacing="0">
+                                <Label Text="Phrases utiles" Style="{StaticResource CardTitle}" />
+                                <Label Text="Des mots pour le quotidien" FontSize="13" TextColor="{StaticResource Muted}" c:Typography.LinePitch="19" Margin="0,9.65,0,0" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource Card}" HeightRequest="152" SemanticProperties.Description="Échanger">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenExchangesCommand}" />
+                        </Border.GestureRecognizers>
+                        <Grid>
+                            <c:Icon Name="MessagesLarge" Color="{StaticResource Primary}" Margin="17.8,17.8,0,0" />
+                            <VerticalStackLayout Margin="16,54.55,16,0" Spacing="0">
+                                <Label Text="Échanger" Style="{StaticResource CardTitle}" />
+                                <Label Text="Un espace avec vos proches" FontSize="13" TextColor="{StaticResource Muted}" c:Typography.LinePitch="19" Margin="0,9.65,0,0" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- Hors connexion -->
+                <Border Style="{StaticResource Card}" HeightRequest="76" Margin="-1,14,-1,0" SemanticProperties.Description="Vos essentiels, même sans réseau">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenOfflineCommand}" />
+                    </Border.GestureRecognizers>
+                    <Grid>
+                        <c:Icon Name="Download" Color="{StaticResource Primary}" Margin="18.2,28.2,0,0" />
+                        <VerticalStackLayout Margin="50,17.45,40,0" Spacing="0">
+                            <Label Text="Vos essentiels, même sans réseau" FontSize="15" LineBreakMode="TailTruncation" />
+                            <Label Text="{Binding OfflineSummary}" FontSize="12" TextColor="{StaticResource Primary}" LineBreakMode="TailTruncation" Margin="0,6.75,0,0" />
+                        </VerticalStackLayout>
+                        <c:Icon Name="ChevronRight" Color="{StaticResource Primary}" Margin="344.2,32,0,0" />
+                    </Grid>
+                </Border>
+
+                <c:InfoNote Margin="0,15,0,0" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <c:BottomNav Grid.Row="1" Active="Accueil" Variant="Tinted" Command="{Binding NavigateTabCommand}" />
+    </Grid>
+</ContentPage>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Écran 9 · Phrases utiles. -->
+<ContentPage
+    x:Class="VoxSign.Views.PhrasesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls"
+    xmlns:m="clr-namespace:VoxSign.Models"
+    xmlns:vm="clr-namespace:VoxSign.ViewModels"
+    x:DataType="vm:PhrasesViewModel">
+
+    <Grid RowDefinitions="*,Auto" IgnoreSafeArea="True">
+        <ScrollView>
+            <VerticalStackLayout Padding="24,0,24,22.85" Spacing="0">
+
+                <c:ScreenHeader
+                    Margin="0,61,0,0"
+                    Title="Phrases utiles"
+                    Subtitle="À montrer, lire ou illustrer"
+                    BackCommand="{Binding GoBackCommand}"
+                    ActionIcon="Dots"
+                    ActionText="Options"
+                    ActionCommand="{Binding ShowOptionsCommand}" />
+
+                <Border Style="{StaticResource Field}" HeightRequest="54" Margin="-1,24,-1,0">
+                    <Grid>
+                        <c:Icon Name="Search" Color="{StaticResource Muted}" Margin="18.2,17.2,0,0" />
+                        <Entry
+                            Text="{Binding SearchText}"
+                            Placeholder="Rechercher une phrase"
+                            PlaceholderColor="{StaticResource Muted}"
+                            FontFamily="InterRegular"
+                            FontSize="15"
+                            TextColor="{StaticResource Ink}"
+                            VerticalOptions="Center"
+                            Margin="50,0,16,0"
+                            SemanticProperties.Description="Rechercher une phrase" />
+                    </Grid>
+                </Border>
+
+                <c:SegmentedFilter ItemsSource="{Binding Themes}" SelectCommand="{Binding SelectThemeCommand}" Margin="0,14,0,0" />
+
+                <Grid Margin="0,16.4,0,0">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ShowOtherThemesCommand}" />
+                    </Grid.GestureRecognizers>
+                    <Label Text="{Binding OtherThemesText}" FontSize="13" TextColor="{StaticResource Muted}" />
+                    <c:Icon Name="ChevronDown" Color="{StaticResource Primary}" HorizontalOptions="End" Margin="0,5.3,3.9,0" />
+                </Grid>
+
+                <!-- Thème mis en avant -->
+                <Border Style="{StaticResource Card}" HeightRequest="99" Margin="-1,16.85,-1,0">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <c:Icon Name="CoffeeLarge" Color="{StaticResource Ink}" Margin="19.2,35.5,0,0" />
+                        <VerticalStackLayout Spacing="0" Margin="60,15.6,12,0">
+                            <Label Text="{Binding ThemeTitle}" FontFamily="InterBold" FontSize="19" LineBreakMode="TailTruncation" />
+                            <Label Text="{Binding ThemeDescription}" FontSize="13" TextColor="{StaticResource Muted}" c:Typography.LinePitch="19" Margin="0,4.2,0,0" />
+                        </VerticalStackLayout>
+                        <Border Grid.Column="1" Style="{StaticResource Pill}" Padding="10,0" VerticalOptions="Center" Margin="0,0,16,0">
+                            <Label Text="{Binding ThemeCount}" Style="{StaticResource ChipText}" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Grid Margin="0,15.55,0,0">
+                    <Label Text="Pour commencer" Style="{StaticResource Section}" SemanticProperties.HeadingLevel="Level2" />
+                    <Label Text="{Binding ShowAllText}" Style="{StaticResource SectionLink}" VerticalOptions="Start" Margin="0,2.85,0,0">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleShowAllCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+
+                <VerticalStackLayout Spacing="8" Margin="0,14.65,0,0" BindableLayout.ItemsSource="{Binding Phrases}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="m:Phrase">
+                            <Border Style="{StaticResource Card}" SemanticProperties.Description="{Binding Text}">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding OpenPhraseCommand, Source={RelativeSource AncestorType={x:Type vm:PhrasesViewModel}}, x:DataType=vm:PhrasesViewModel}"
+                                        CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <Grid ColumnDefinitions="*,Auto" Padding="16,0,0,0">
+                                    <VerticalStackLayout Spacing="0" Margin="0,15.7,8,17.1">
+                                        <Label Text="{Binding Text}" FontSize="16" c:Typography.LinePitch="23" />
+                                        <Label Text="{Binding Caption}" FontSize="12" TextColor="{StaticResource Muted}" Margin="0,7.7,0,0" />
+                                    </VerticalStackLayout>
+                                    <Grid Grid.Column="1" WidthRequest="56" VerticalOptions="Fill" SemanticProperties.Description="Favori">
+                                        <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                Command="{Binding ToggleFavoriteCommand, Source={RelativeSource AncestorType={x:Type vm:PhrasesViewModel}}, x:DataType=vm:PhrasesViewModel}"
+                                                CommandParameter="{Binding .}" />
+                                        </Grid.GestureRecognizers>
+                                        <c:Icon Name="BookmarkLarge" Color="{StaticResource Primary}" VerticalOptions="Center" Margin="13.1,0,0,0">
+                                            <c:Icon.Triggers>
+                                                <DataTrigger TargetType="c:Icon" Binding="{Binding IsFavorite}" Value="True">
+                                                    <Setter Property="Name" Value="BookmarkCheckLarge" />
+                                                </DataTrigger>
+                                            </c:Icon.Triggers>
+                                        </c:Icon>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <Border Style="{StaticResource TintButton}" Margin="0,15,0,0" SemanticProperties.Description="Créer ma propre phrase">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CreatePhraseCommand}" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                        <c:Icon Name="Plus" Color="{StaticResource Primary}" VerticalOptions="Center" Margin="3.9,0,0,0" />
+                        <Label Text="Créer ma propre phrase" Style="{StaticResource ButtonText}" TextColor="{StaticResource Primary}" Margin="14.1,0,0,0" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Label
+                    Text="Touchez une phrase pour l’afficher en grand, la faire lire ou ouvrir ses repères illustrés."
+                    Style="{StaticResource Caption}"
+                    HorizontalTextAlignment="Center"
+                    Margin="-3,16.15,-3,0" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <c:BottomNav Grid.Row="1" Active="Accueil" Variant="Tinted" Command="{Binding NavigateTabCommand}" />
+    </Grid>
+</ContentPage>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Écran 11 · Sans connexion. -->
+<ContentPage
+    x:Class="VoxSign.Views.OfflinePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls"
+    xmlns:m="clr-namespace:VoxSign.Models"
+    xmlns:vm="clr-namespace:VoxSign.ViewModels"
+    x:DataType="vm:OfflineViewModel">
+
+    <ContentPage.Resources>
+        <!-- Carte d'un pack : tuile d'icône 42, nom, contenu, pastille d'état et action -->
+        <DataTemplate x:Key="PackTemplate" x:DataType="m:OfflinePack">
+            <Border Style="{StaticResource Card}" HeightRequest="133" SemanticProperties.Description="{Binding Name}">
+                <Grid>
+                    <Border Style="{StaticResource Field}" WidthRequest="44" HeightRequest="44" HorizontalOptions="Start" VerticalOptions="Start" Margin="15,15.5,0,0">
+                        <c:Icon Name="{Binding Icon}" Color="{StaticResource Primary}" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <VerticalStackLayout Spacing="0" Margin="70,17.5,16,0">
+                        <Label Text="{Binding Name}" FontSize="16" LineBreakMode="TailTruncation" />
+                        <Label Text="{Binding Content}" FontSize="12" TextColor="{StaticResource Muted}" Margin="0,6.5,0,0" />
+                    </VerticalStackLayout>
+                    <Grid ColumnDefinitions="Auto,*" Margin="15,78.5,16.1,0" VerticalOptions="Start" HeightRequest="29">
+                        <Border Style="{StaticResource OutlinePill}">
+                            <HorizontalStackLayout Spacing="0">
+                                <c:Icon Name="{Binding StatusIcon}" Color="{StaticResource Primary}" Margin="10.7,7.2,0,0" />
+                                <Label Text="{Binding StatusText}" Style="{StaticResource ChipText}" Margin="6.6,0,10.7,0" />
+                            </HorizontalStackLayout>
+                        </Border>
+                        <Label
+                            Grid.Column="1"
+                            Text="{Binding ActionText}"
+                            FontFamily="InterSemiBold"
+                            FontSize="14"
+                            TextColor="{StaticResource Primary}"
+                            HorizontalOptions="End"
+                            VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding PackActionCommand, Source={RelativeSource AncestorType={x:Type vm:OfflineViewModel}}, x:DataType=vm:OfflineViewModel}"
+                                    CommandParameter="{Binding .}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*,Auto" IgnoreSafeArea="True">
+        <ScrollView>
+            <VerticalStackLayout Padding="24,0,24,22.85" Spacing="0">
+
+                <c:ScreenHeader
+                    Margin="0,61,0,0"
+                    Title="Sans connexion"
+                    Subtitle="Préparer vos essentiels à l’avance"
+                    BackCommand="{Binding GoBackCommand}"
+                    ActionIcon="Dots"
+                    ActionText="Options"
+                    ActionFrameStyle="Rounded"
+                    ActionCommand="{Binding ShowOptionsCommand}" />
+
+                <!-- Récapitulatif -->
+                <Border Style="{StaticResource Card}" HeightRequest="109" Margin="-1,24,-1,0">
+                    <Grid>
+                        <c:Icon Name="CloudDownload" Color="{StaticResource Primary}" Margin="19.4,21.4,0,0" />
+                        <Label Text="{Binding Summary}" FontSize="18" LineBreakMode="TailTruncation" Margin="52,20.55,16,0" />
+                        <Label Text="{Binding Details}" FontSize="13" TextColor="{StaticResource Muted}" Margin="18,55.4,16,0" />
+                        <c:UsageBar Value="{Binding Usage}" VerticalOptions="Start" Margin="18,83,18,0" />
+                    </Grid>
+                </Border>
+
+                <Label Text="Vos packs téléchargés" Style="{StaticResource Section}" Margin="0,15.55,0,0" SemanticProperties.HeadingLevel="Level2" />
+                <VerticalStackLayout
+                    Spacing="14"
+                    Margin="0,14.65,0,0"
+                    BindableLayout.ItemsSource="{Binding Downloaded}"
+                    BindableLayout.ItemTemplate="{StaticResource PackTemplate}" />
+
+                <Grid Margin="0,15.55,0,0">
+                    <Label Text="À ajouter" Style="{StaticResource Section}" SemanticProperties.HeadingLevel="Level2" />
+                    <Label Text="Via Wi-Fi" Style="{StaticResource SectionLink}" VerticalOptions="Start" Margin="0,2.85,0,0" />
+                </Grid>
+                <VerticalStackLayout
+                    Spacing="14"
+                    Margin="0,14.65,0,0"
+                    BindableLayout.ItemsSource="{Binding Available}"
+                    BindableLayout.ItemTemplate="{StaticResource PackTemplate}" />
+
+                <c:InfoNote
+                    Variant="OutlineMuted"
+                    Text="Hors connexion : consultez vos packs, écrivez et montrez une phrase. La reconnaissance vocale et les échanges nécessitent Internet."
+                    Margin="0,14,0,0" />
+
+                <Label
+                    Text="Lecture vocale hors ligne : selon les voix déjà installées sur votre téléphone. Les favoris restent consultables."
+                    Style="{StaticResource Caption}"
+                    Margin="0,15.15,-4,0" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <c:BottomNav Grid.Row="1" Active="Accueil" Variant="Boxed" Command="{Binding NavigateTabCommand}" />
+    </Grid>
+</ContentPage>

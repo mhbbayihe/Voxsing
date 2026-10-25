@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Écran 10 · Vos favoris. -->
+<ContentPage
+    x:Class="VoxSign.Views.FavoritesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls"
+    xmlns:m="clr-namespace:VoxSign.Models"
+    xmlns:vm="clr-namespace:VoxSign.ViewModels"
+    x:DataType="vm:FavoritesViewModel">
+
+    <Grid RowDefinitions="*,Auto" IgnoreSafeArea="True">
+        <ScrollView>
+            <VerticalStackLayout Padding="24,0,24,22" Spacing="0">
+
+                <c:ScreenHeader
+                    Margin="0,61,0,0"
+                    ShowBack="False"
+                    Title="Vos favoris"
+                    Subtitle="Les repères qui vous ressemblent"
+                    ActionIcon="Sliders"
+                    ActionText="Filtres"
+                    ActionCommand="{Binding ShowFiltersCommand}" />
+
+                <Border Style="{StaticResource Field}" HeightRequest="54" Margin="-1,24,-1,0">
+                    <Grid>
+                        <c:Icon Name="Search" Color="{StaticResource Muted}" Margin="18.2,17.2,0,0" />
+                        <Entry
+                            Text="{Binding SearchText}"
+                            Placeholder="Rechercher dans mes favoris"
+                            PlaceholderColor="{StaticResource Muted}"
+                            FontFamily="InterRegular"
+                            FontSize="15"
+                            TextColor="{StaticResource Ink}"
+                            VerticalOptions="Center"
+                            Margin="50,0,16,0"
+                            SemanticProperties.Description="Rechercher dans mes favoris" />
+                    </Grid>
+                </Border>
+
+                <c:SegmentedFilter ItemsSource="{Binding Filters}" SelectCommand="{Binding SelectFilterCommand}" Margin="0,14,0,0" />
+
+                <!-- Signes -->
+                <VerticalStackLayout Spacing="0" IsVisible="{Binding ShowSigns}">
+                    <Grid Margin="0,15.55,0,0">
+                        <Label Text="Signes illustrés" Style="{StaticResource Section}" SemanticProperties.HeadingLevel="Level2" />
+                        <Label Text="{Binding SignsCount}" Style="{StaticResource SectionLink}" VerticalOptions="Start" Margin="0,2.85,0,0" />
+                    </Grid>
+
+                    <c:UniformGrid Columns="2" ColumnSpacing="12" RowSpacing="14" Margin="0,14.65,0,0" BindableLayout.ItemsSource="{Binding Signs}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="m:Sign">
+                                <Border Style="{StaticResource Card}" SemanticProperties.Description="{Binding Word}">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding OpenSignCommand, Source={RelativeSource AncestorType={x:Type vm:FavoritesViewModel}}, x:DataType=vm:FavoritesViewModel}"
+                                            CommandParameter="{Binding .}" />
+                                    </Border.GestureRecognizers>
+                                    <VerticalStackLayout Padding="10,10,10,11.1" Spacing="0">
+                                        <Border Style="{StaticResource Photo}" HeightRequest="104">
+                                            <Image Source="{Binding Image}" />
+                                        </Border>
+                                        <Grid Margin="0,8.55,0,0">
+                                            <Label Text="{Binding Word}" Style="{StaticResource CardTitle}" LineBreakMode="TailTruncation" Margin="0,0,24,0" />
+                                            <Grid WidthRequest="32" HeightRequest="20.5" HorizontalOptions="End" VerticalOptions="Start" Margin="0,0,-6,0" SemanticProperties.Description="Retirer des favoris">
+                                                <Grid.GestureRecognizers>
+                                                    <TapGestureRecognizer
+                                                        Command="{Binding RemoveSignCommand, Source={RelativeSource AncestorType={x:Type vm:FavoritesViewModel}}, x:DataType=vm:FavoritesViewModel}"
+                                                        CommandParameter="{Binding .}" />
+                                                </Grid.GestureRecognizers>
+                                                <c:Icon Name="BookmarkCheck" Color="{StaticResource Primary}" Margin="9.7,1.95,0,0" />
+                                            </Grid>
+                                        </Grid>
+                                        <Label Text="{Binding FavoriteCaption}" FontSize="12" TextColor="{StaticResource Muted}" LineBreakMode="TailTruncation" Margin="0,9.25,0,0" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </c:UniformGrid>
+                </VerticalStackLayout>
+
+                <!-- Phrases -->
+                <VerticalStackLayout Spacing="0" IsVisible="{Binding ShowPhrases}">
+                    <Grid Margin="0,15.55,0,0">
+                        <Label Text="Phrases enregistrées" Style="{StaticResource Section}" SemanticProperties.HeadingLevel="Level2" />
+                        <Label Text="{Binding PhrasesCount}" Style="{StaticResource SectionLink}" VerticalOptions="Start" Margin="0,2.85,0,0" />
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="8" Margin="0,14.65,0,0" BindableLayout.ItemsSource="{Binding Phrases}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="m:Phrase">
+                                <Border Style="{StaticResource Card}" SemanticProperties.Description="{Binding Text}">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding OpenPhraseCommand, Source={RelativeSource AncestorType={x:Type vm:FavoritesViewModel}}, x:DataType=vm:FavoritesViewModel}"
+                                            CommandParameter="{Binding .}" />
+                                    </Border.GestureRecognizers>
+                                    <Grid ColumnDefinitions="*,Auto" Padding="16,0,0,0">
+                                        <VerticalStackLayout Spacing="0" Margin="0,15.7,8,17.1">
+                                            <Label Text="{Binding Text}" FontSize="16" c:Typography.LinePitch="23" />
+                                            <Label Text="{Binding SavedCaption}" FontSize="12" TextColor="{StaticResource Muted}" Margin="0,7.7,0,0" />
+                                        </VerticalStackLayout>
+                                        <Grid Grid.Column="1" WidthRequest="56" VerticalOptions="Fill" SemanticProperties.Description="Retirer des favoris">
+                                            <Grid.GestureRecognizers>
+                                                <TapGestureRecognizer
+                                                    Command="{Binding RemovePhraseCommand, Source={RelativeSource AncestorType={x:Type vm:FavoritesViewModel}}, x:DataType=vm:FavoritesViewModel}"
+                                                    CommandParameter="{Binding .}" />
+                                            </Grid.GestureRecognizers>
+                                            <c:Icon Name="BookmarkCheckLarge" Color="{StaticResource Primary}" VerticalOptions="Center" Margin="13.1,0,0,0" />
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+
+                <c:InfoNote
+                    Variant="Outline"
+                    Icon="BookmarkSmall"
+                    Inset="15"
+                    TextLeft="42"
+                    IconLeft="17.2"
+                    Text="Retrouvez vos phrases en un geste. Le marque-page permet de retirer un favori."
+                    Margin="0,14,0,0" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <c:BottomNav Grid.Row="1" Active="Favoris" Variant="Outlined" Command="{Binding NavigateTabCommand}" />
+    </Grid>
+</ContentPage>

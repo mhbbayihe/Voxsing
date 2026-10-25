@@ -1,0 +1,10 @@
+.vs/
+**/bin/
+**/obj/
+**/TestResults/
+*.csproj.user
+*.suo
+*.user
+*.db
+*.db-shm
+*.db-wal

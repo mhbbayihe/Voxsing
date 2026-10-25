@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- En-tête des écrans : bouton Retour (optionnel), titre + sous-titre, action à droite.
+     Positionné à y = 61 (voir Margin dans les pages), hauteur 54. -->
+<ContentView
+    x:Class="VoxSign.Controls.ScreenHeader"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls"
+    x:Name="Root"
+    x:DataType="c:ScreenHeader">
+
+    <Grid ColumnDefinitions="Auto,*,48" HeightRequest="54">
+
+        <!-- Retour -->
+        <Border
+            x:Name="BackButton"
+            Style="{StaticResource Field}"
+            Margin="-1,0,0,0"
+            WidthRequest="46"
+            HeightRequest="54"
+            IsVisible="{Binding ShowBack, Source={x:Reference Root}}"
+            SemanticProperties.Description="Retour">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding BackCommand, Source={x:Reference Root}}" />
+            </Border.GestureRecognizers>
+            <Grid>
+                <c:Icon Name="ArrowLeft" Color="{StaticResource Ink}" Margin="15.5,12.1,0,0" />
+                <Label Text="Retour" Style="{StaticResource IconCaption}" Margin="0,31.8,0,0" />
+            </Grid>
+        </Border>
+
+        <!-- Titre -->
+        <VerticalStackLayout Grid.Column="1" x:Name="TitleStack" Spacing="0">
+            <HorizontalStackLayout Spacing="0">
+                <Label
+                    Text="{Binding Title, Source={x:Reference Root}}"
+                    Style="{StaticResource Title}"
+                    Margin="0,2.75,0,0"
+                    SemanticProperties.HeadingLevel="Level1" />
+                <!-- Image accolée au titre (le 👋 de l'accueil) -->
+                <Image
+                    Source="{Binding TitleImage, Source={x:Reference Root}}"
+                    IsVisible="{Binding TitleImage, Source={x:Reference Root}, Converter={x:Static c:Converters.IsNotNull}}"
+                    WidthRequest="24"
+                    HeightRequest="24"
+                    VerticalOptions="Start"
+                    Margin="0,3.7,0,0"
+                    Aspect="AspectFit" />
+            </HorizontalStackLayout>
+            <Label
+                Text="{Binding Subtitle, Source={x:Reference Root}}"
+                Style="{StaticResource Subtitle}"
+                Margin="0,3.6,0,0" />
+        </VerticalStackLayout>
+
+        <!-- Action à droite -->
+        <Border
+            x:Name="ActionFrame"
+            Grid.Column="2"
+            Margin="-1,0"
+            HeightRequest="54"
+            StrokeThickness="0"
+            Background="Transparent"
+            IsVisible="{Binding HasAction, Source={x:Reference Root}}"
+            SemanticProperties.Description="{Binding ActionText, Source={x:Reference Root}}">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding ActionCommand, Source={x:Reference Root}}" />
+            </Border.GestureRecognizers>
+            <Grid>
+                <c:Icon
+                    x:Name="ActionIconView"
+                    Name="{Binding ActionIcon, Source={x:Reference Root}}"
+                    Color="{StaticResource Ink}"
+                    HorizontalOptions="Center" />
+                <Label
+                    x:Name="ActionLabel"
+                    Text="{Binding ActionText, Source={x:Reference Root}}"
+                    Style="{StaticResource IconCaption}"
+                    Margin="0,32.8,0,0" />
+            </Grid>
+        </Border>
+    </Grid>
+</ContentView>

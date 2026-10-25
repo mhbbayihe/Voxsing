@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Logo VoxSign + badge LSF (écrans de connexion et d'inscription), hauteur 42. -->
+<ContentView
+    x:Class="VoxSign.Controls.BrandHeader"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls">
+
+    <HorizontalStackLayout HeightRequest="42" Spacing="0">
+        <Border
+            Background="{StaticResource Primary}"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 14"
+            WidthRequest="42"
+            HeightRequest="42">
+            <c:Icon Name="HandLogo" Color="{StaticResource White}" Margin="10,10.1,0,0" />
+        </Border>
+        <!-- -0,02 em : CharacterSpacing MAUI vaut 0,0624 em par unité -->
+        <Label
+            Text="VoxSign"
+            FontSize="26"
+            CharacterSpacing="-0.32"
+            LineBreakMode="NoWrap"
+            Margin="10,5.3,0,0"
+            SemanticProperties.HeadingLevel="Level1" />
+        <Border Style="{StaticResource Pill}" Padding="10,0" Margin="11.1,7.5,0,0" VerticalOptions="Start">
+            <Label Text="LSF" Style="{StaticResource ChipText}" />
+        </Border>
+    </HorizontalStackLayout>
+</ContentView>

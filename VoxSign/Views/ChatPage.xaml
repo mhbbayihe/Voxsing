@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Écran 12 · Échanges (conversation avec un proche). -->
+<ContentPage
+    x:Class="VoxSign.Views.ChatPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls"
+    xmlns:m="clr-namespace:VoxSign.Models"
+    xmlns:vm="clr-namespace:VoxSign.ViewModels"
+    x:DataType="vm:ChatViewModel">
+
+    <ContentPage.Resources>
+        <c:ChatMessageTemplateSelector x:Key="MessageTemplates">
+            <!-- Message reçu : bulle de 312 à gauche -->
+            <c:ChatMessageTemplateSelector.Received>
+                <DataTemplate x:DataType="m:ChatMessage">
+                    <Border Style="{StaticResource Card}" WidthRequest="312" HorizontalOptions="Start">
+                        <VerticalStackLayout Padding="14,13.55,14,13.35" Spacing="0">
+                            <Label Text="{Binding Text}" FontSize="15" c:Typography.LinePitch="22" />
+                            <Label Text="{Binding Meta}" FontSize="11" TextColor="{StaticResource Muted}" Margin="0,6.8,0,0" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </c:ChatMessageTemplateSelector.Received>
+
+            <!-- Phrase envoyée avec ses repères : bulle de 322 à droite -->
+            <c:ChatMessageTemplateSelector.IllustratedSent>
+                <DataTemplate x:DataType="m:ChatMessage">
+                    <Border Style="{StaticResource Card}" WidthRequest="322" HorizontalOptions="End">
+                        <VerticalStackLayout Padding="12,13.35,12,11.35" Spacing="0">
+                            <Grid>
+                                <c:Icon Name="HandChat" Color="{StaticResource Primary}" Margin="0.8,-0.05,0,0" />
+                                <Label Text="Support illustré · LSF à valider" FontSize="12" TextColor="{StaticResource Primary}" Margin="22,0,0,0" />
+                            </Grid>
+                            <Label Text="{Binding Text}" FontSize="15" c:Typography.LinePitch="22" Margin="0,8.65,0,0" />
+                            <c:UniformGrid Columns="3" ColumnSpacing="6" Margin="0,8.45,0,0" BindableLayout.ItemsSource="{Binding Signs}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate x:DataType="m:Sign">
+                                        <VerticalStackLayout Spacing="0">
+                                            <Border Style="{StaticResource Photo}" HeightRequest="60">
+                                                <Image Source="{Binding Image}" SemanticProperties.Description="{Binding Word}" />
+                                            </Border>
+                                            <Label Text="{Binding Word}" FontFamily="InterSemiBold" FontSize="10" HorizontalOptions="Center" LineBreakMode="NoWrap" Margin="0,4.3,0,0" />
+                                        </VerticalStackLayout>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </c:UniformGrid>
+                            <Label Text="{Binding Meta}" FontSize="11" TextColor="{StaticResource Primary}" Margin="0,7.9,0,0" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </c:ChatMessageTemplateSelector.IllustratedSent>
+
+            <!-- Repère envoyé seul : vignette 68 + mot -->
+            <c:ChatMessageTemplateSelector.SignSent>
+                <DataTemplate x:DataType="m:ChatMessage">
+                    <Border Style="{StaticResource Card}" WidthRequest="210" HorizontalOptions="End">
+                        <Grid ColumnDefinitions="68,*" Padding="10" ColumnSpacing="12">
+                            <Border Style="{StaticResource Photo}" HeightRequest="68" VerticalOptions="Start">
+                                <Image Source="{Binding FirstSign.Image}" SemanticProperties.Description="{Binding FirstSign.Word}" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="0" Margin="0,6.5,2,0">
+                                <Label Text="{Binding Text}" FontSize="16" />
+                                <Label Text="{Binding Meta}" FontSize="11" TextColor="{StaticResource Muted}" c:Typography.LinePitch="16" Margin="0,5.1,0,0" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </c:ChatMessageTemplateSelector.SignSent>
+        </c:ChatMessageTemplateSelector>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*,Auto" IgnoreSafeArea="True">
+        <ScrollView>
+            <VerticalStackLayout Padding="24,0,24,22.85" Spacing="0">
+
+                <c:ScreenHeader
+                    Margin="0,61,0,0"
+                    Title="{Binding Title}"
+                    Subtitle="{Binding Status}"
+                    BackCommand="{Binding GoBackCommand}"
+                    ActionIcon="User"
+                    ActionText="Profil"
+                    ActionCommand="{Binding ShowProfileCommand}" />
+
+                <!-- Proches + invitation, sur un filet de 2 -->
+                <Grid HeightRequest="46" Margin="0,24,0,0">
+                    <BoxView HeightRequest="2" VerticalOptions="End" Color="{StaticResource Line}" />
+                    <Border Style="{StaticResource Pill}" Background="{StaticResource White}" VerticalOptions="Start" Margin="0,9.5,0,0">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ShowContactsCommand}" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="0">
+                            <c:Icon Name="Users" Color="{StaticResource Primary}" Margin="10.7,7.7,0,0" />
+                            <Label Text="{Binding ContactsLabel}" Style="{StaticResource ChipText}" Margin="6.6,0,11,0" />
+                        </HorizontalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource Field}" WidthRequest="130" HorizontalOptions="End" Margin="0,0,-1,0" SemanticProperties.Description="Inviter un proche">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding InviteCommand}" />
+                        </Border.GestureRecognizers>
+                        <Grid>
+                            <c:Icon Name="UserPlus" Color="{StaticResource Primary}" Margin="1,14.8,0,0" />
+                            <Label Text="Inviter un proche" FontSize="13" TextColor="{StaticResource Primary}" LineBreakMode="NoWrap" Margin="24,14.4,0,0" />
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <Label Text="{Binding DayLabel}" FontSize="12" TextColor="{StaticResource Muted}" HorizontalOptions="Center" Margin="0,16.4,0,0" />
+
+                <VerticalStackLayout
+                    Spacing="10"
+                    Margin="0,16.1,0,0"
+                    BindableLayout.ItemsSource="{Binding Messages}"
+                    BindableLayout.ItemTemplateSelector="{StaticResource MessageTemplates}" />
+
+                <!-- Saisie -->
+                <Border Style="{StaticResource Field}" HeightRequest="58" Margin="-1,14,-1,0">
+                    <Grid>
+                        <Entry
+                            Text="{Binding Draft}"
+                            Placeholder="Écrire un message…"
+                            PlaceholderColor="{StaticResource Muted}"
+                            FontFamily="InterRegular"
+                            FontSize="15"
+                            TextColor="{StaticResource Ink}"
+                            VerticalOptions="Center"
+                            ReturnType="Send"
+                            ReturnCommand="{Binding SendCommand}"
+                            Margin="12,0,78,0"
+                            SemanticProperties.Description="Écrire un message" />
+                        <Border
+                            Background="{StaticResource Primary}"
+                            StrokeThickness="0"
+                            StrokeShape="RoundRectangle 12"
+                            WidthRequest="54"
+                            HeightRequest="44"
+                            HorizontalOptions="End"
+                            VerticalOptions="Start"
+                            Margin="0,6,12,0"
+                            SemanticProperties.Description="Envoyer">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SendCommand}" />
+                            </Border.GestureRecognizers>
+                            <Grid>
+                                <c:Icon Name="ArrowUp" Color="{StaticResource White}" HorizontalOptions="Center" Margin="0,9,0,0" />
+                                <Label Text="Envoyer" FontFamily="InterSemiBold" FontSize="10" TextColor="{StaticResource White}" HorizontalOptions="Center" Margin="0,26.3,0,0" />
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource Field}" HeightRequest="58" Margin="-1,14,-1,0" SemanticProperties.Description="Partager une phrase">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SharePhraseCommand}" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                        <c:Icon Name="Share" Color="{StaticResource Primary}" VerticalOptions="Center" Margin="1.5,0,0,0" />
+                        <Label Text="Partager une phrase" Style="{StaticResource ButtonText}" TextColor="{StaticResource Primary}" Margin="12.2,0,0,0" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Label
+                    Text="Exemple d’échange · signes illustrés non certifiés. Les échanges à distance nécessitent Internet."
+                    Style="{StaticResource Caption}"
+                    HorizontalTextAlignment="Center"
+                    Margin="0,15.15,0,0" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <c:BottomNav Grid.Row="1" Active="Echanges" Variant="BoxedMuted" Command="{Binding NavigateTabCommand}" />
+    </Grid>
+</ContentPage>

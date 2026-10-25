@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Écran 6 · Séquence illustrée. -->
+<ContentPage
+    x:Class="VoxSign.Views.SequencePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls"
+    xmlns:m="clr-namespace:VoxSign.Models"
+    xmlns:vm="clr-namespace:VoxSign.ViewModels"
+    x:DataType="vm:SequenceViewModel">
+
+    <Grid RowDefinitions="*,Auto" IgnoreSafeArea="True">
+        <ScrollView>
+            <VerticalStackLayout Padding="24,0,24,23" Spacing="0">
+
+                <c:ScreenHeader
+                    Margin="0,61,0,0"
+                    Title="Séquence illustrée"
+                    Subtitle="Repères illustrés · LSF"
+                    BackCommand="{Binding GoBackCommand}"
+                    ActionIcon="Dots"
+                    ActionText="Options" />
+
+                <Label Text="VOTRE PHRASE" FontSize="12" TextColor="{StaticResource Muted}" Margin="0,26.4,0,0" />
+                <Label Text="{Binding Phrase}" FontSize="18" Margin="0,9.65,0,0" />
+
+                <!-- Repère courant -->
+                <Border Style="{StaticResource Card}" HeightRequest="278" Margin="-1,16.65,-1,0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding OpenSignCommand}" />
+                    </Border.GestureRecognizers>
+                    <Grid RowDefinitions="Auto,Auto,Auto" Padding="12,12,12,0">
+                        <Grid ColumnDefinitions="Auto,*,Auto" HeightRequest="27">
+                            <Border Style="{StaticResource Pill}" Padding="10,0">
+                                <Label Text="{Binding Position}" Style="{StaticResource ChipText}" />
+                            </Border>
+                            <Label
+                                Grid.Column="1"
+                                Text="{Binding Current.Sign.Word}"
+                                FontFamily="InterBold"
+                                FontSize="20"
+                                HorizontalOptions="Center"
+                                Margin="0,1.1,0,0" />
+                            <!-- Le titre est centré entre la pastille et le cœur (x = 363) -->
+                            <Grid Grid.Column="2" WidthRequest="33" HeightRequest="27" Margin="0,0,-12,0" SemanticProperties.Description="Ajouter aux favoris">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ToggleFavoriteCommand}" />
+                                </Grid.GestureRecognizers>
+                                <c:Icon Name="Heart" Color="{StaticResource Primary}" Margin="0.3,5.5,0,0" />
+                            </Grid>
+                        </Grid>
+                        <Border Grid.Row="1" Style="{StaticResource Photo}" HeightRequest="188" Margin="0,10,0,0">
+                            <Image Source="{Binding Current.Sign.Image}" SemanticProperties.Description="{Binding Current.Sign.Word}" />
+                        </Border>
+                        <Label
+                            Grid.Row="2"
+                            Text="Illustration indicative · ouvrez la fiche pour apprendre"
+                            FontSize="12"
+                            TextColor="{StaticResource Muted}"
+                            HorizontalOptions="Center"
+                            LineBreakMode="NoWrap"
+                            Margin="0,11.4,0,0" />
+                    </Grid>
+                </Border>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,15,0,0">
+                    <Border Style="{StaticResource TintButton}" SemanticProperties.Description="Repère précédent">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding PreviousCommand}" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                            <c:Icon Name="ArrowLeftNav" Color="{StaticResource Primary}" VerticalOptions="Center" Margin="3.7,0,0,0" />
+                            <Label Text="Précédent" Style="{StaticResource ButtonText}" TextColor="{StaticResource Primary}" Margin="14.1,0,0,0" />
+                        </HorizontalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource TintButton}" SemanticProperties.Description="Repère suivant">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding NextCommand}" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                            <c:Icon Name="ArrowRight" Color="{StaticResource Primary}" VerticalOptions="Center" Margin="3.2,0,0,0" />
+                            <Label Text="Suivant" Style="{StaticResource ButtonText}" TextColor="{StaticResource Primary}" Margin="13.9,0,0,0" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- Étapes : case de 99 de haut ; contour de 1 (2 pour l'étape courante) à l'extérieur -->
+                <c:UniformGrid Columns="3" ColumnSpacing="10" Margin="0,16,0,0" BindableLayout.ItemsSource="{Binding Steps}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="m:SequenceStep">
+                            <Border
+                                Background="{StaticResource White}"
+                                Stroke="{StaticResource Line}"
+                                StrokeThickness="1"
+                                StrokeShape="RoundRectangle 12.5"
+                                Margin="-1"
+                                HeightRequest="101"
+                                SemanticProperties.Description="{Binding Caption}">
+                                <Border.Triggers>
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsCurrent}" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource Tint}" />
+                                        <Setter Property="Stroke" Value="{StaticResource Primary}" />
+                                        <Setter Property="StrokeThickness" Value="2" />
+                                        <Setter Property="StrokeShape" Value="RoundRectangle 13" />
+                                        <Setter Property="Margin" Value="-2" />
+                                        <Setter Property="HeightRequest" Value="103" />
+                                    </DataTrigger>
+                                </Border.Triggers>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SelectCommand, Source={RelativeSource AncestorType={x:Type vm:SequenceViewModel}}, x:DataType=vm:SequenceViewModel}" CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="0" Padding="6,6,6,0">
+                                    <Border Style="{StaticResource Photo}" HeightRequest="68">
+                                        <Image Source="{Binding Sign.Image}" />
+                                    </Border>
+                                    <Label Text="{Binding Caption}" FontSize="11" HorizontalOptions="Center" LineBreakMode="NoWrap" Margin="0,6.35,0,0" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </c:UniformGrid>
+
+                <Label
+                    Text="Ces repères de sens ne reproduisent pas la grammaire ni l’ordre d’une phrase en LSF."
+                    FontSize="13"
+                    TextColor="{StaticResource Muted}"
+                    c:Typography.LinePitch="19"
+                    Margin="0,15.75,0,0" />
+
+                <Border Style="{StaticResource PrimaryButton}" Margin="0,16.25,0,0" SemanticProperties.Description="Partager le support">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ShareCommand}" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                        <c:Icon Name="Share" Color="{StaticResource White}" VerticalOptions="Center" Margin="1.8,0,0,0" />
+                        <Label Text="Partager le support" Style="{StaticResource ButtonText}" TextColor="{StaticResource White}" Margin="12.2,0,0,0" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <c:InfoNote Margin="0,16,0,0" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <c:BottomNav Grid.Row="1" Active="Accueil" Variant="Tinted" Command="{Binding NavigateTabCommand}" />
+    </Grid>
+</ContentPage>

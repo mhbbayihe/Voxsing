@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="VoxSign.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:VoxSign.Views"
+    Title="VoxSign"
+    FlyoutBehavior="Disabled"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False"
+    BackgroundColor="{StaticResource BackgroundStart}">
+
+    <!-- La barre d'onglets est dessinée par chaque écran (BottomNav) : la maquette en varie l'apparence. -->
+    <ShellContent Route="login" ContentTemplate="{DataTemplate views:LoginPage}" />
+    <ShellContent Route="home" ContentTemplate="{DataTemplate views:HomePage}" />
+    <ShellContent Route="dictionary" ContentTemplate="{DataTemplate views:DictionaryPage}" />
+    <ShellContent Route="favorites" ContentTemplate="{DataTemplate views:FavoritesPage}" />
+    <ShellContent Route="chat" ContentTemplate="{DataTemplate views:ChatPage}" />
+
+</Shell>

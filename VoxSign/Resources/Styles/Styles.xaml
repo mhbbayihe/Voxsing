@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls">
+
+    <!-- ============ Pages ============ -->
+    <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
+        <Setter Property="Background" Value="{StaticResource PageBackground}" />
+        <Setter Property="Shell.NavBarIsVisible" Value="False" />
+        <Setter Property="Shell.TabBarIsVisible" Value="False" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+
+    <Style TargetType="ScrollView">
+        <Setter Property="VerticalScrollBarVisibility" Value="Never" />
+    </Style>
+
+    <!-- ============ Typographie (Inter) ============ -->
+    <Style TargetType="Label">
+        <Setter Property="FontFamily" Value="InterRegular" />
+        <Setter Property="TextColor" Value="{StaticResource Ink}" />
+        <Setter Property="LineBreakMode" Value="WordWrap" />
+    </Style>
+
+    <!-- Gros titre des écrans d'accueil (30) -->
+    <Style x:Key="Display" TargetType="Label">
+        <Setter Property="FontSize" Value="30" />
+        <Setter Property="c:Typography.LinePitch" Value="34" />
+    </Style>
+    <!-- Titre d'en-tête (24 gras) -->
+    <Style x:Key="Title" TargetType="Label">
+        <Setter Property="FontFamily" Value="InterBold" />
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="LineBreakMode" Value="TailTruncation" />
+    </Style>
+    <!-- Sous-titre d'en-tête (12 gris) -->
+    <Style x:Key="Subtitle" TargetType="Label">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextColor" Value="{StaticResource Muted}" />
+        <Setter Property="LineBreakMode" Value="TailTruncation" />
+    </Style>
+    <!-- Titre de section (18 gras) -->
+    <Style x:Key="Section" TargetType="Label">
+        <Setter Property="FontFamily" Value="InterBold" />
+        <Setter Property="FontSize" Value="18" />
+    </Style>
+    <!-- Lien de section à droite (13 semi-gras primaire) -->
+    <Style x:Key="SectionLink" TargetType="Label">
+        <Setter Property="FontFamily" Value="InterSemiBold" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextColor" Value="{StaticResource Primary}" />
+        <Setter Property="HorizontalOptions" Value="End" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+    <!-- Titre de carte (17 gras) -->
+    <Style x:Key="CardTitle" TargetType="Label">
+        <Setter Property="FontFamily" Value="InterBold" />
+        <Setter Property="FontSize" Value="17" />
+    </Style>
+    <!-- Libellé de champ (14) -->
+    <Style x:Key="FieldLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+    <!-- Texte de bouton (16) -->
+    <Style x:Key="ButtonText" TargetType="Label">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="LineBreakMode" Value="NoWrap" />
+    </Style>
+    <!-- Puce / badge (12 semi-gras primaire) -->
+    <Style x:Key="ChipText" TargetType="Label">
+        <Setter Property="FontFamily" Value="InterSemiBold" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextColor" Value="{StaticResource Primary}" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="LineBreakMode" Value="NoWrap" />
+    </Style>
+    <!-- Petit texte gris (12) -->
+    <Style x:Key="Caption" TargetType="Label">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextColor" Value="{StaticResource Muted}" />
+        <Setter Property="c:Typography.LinePitch" Value="17" />
+    </Style>
+    <!-- Libellé sous une icône d'en-tête (10 semi-gras gris) -->
+    <Style x:Key="IconCaption" TargetType="Label">
+        <Setter Property="FontFamily" Value="InterSemiBold" />
+        <Setter Property="FontSize" Value="10" />
+        <Setter Property="TextColor" Value="{StaticResource Muted}" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="LineBreakMode" Value="NoWrap" />
+    </Style>
+
+    <!-- ============ Surfaces ============ -->
+    <!-- Carte blanche bordée, rayon 20 : la bordure de 1 est à l'extérieur de la surface (d'où la marge -1) -->
+    <Style x:Key="Card" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource White}" />
+        <Setter Property="Stroke" Value="{StaticResource Line}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 20.5" />
+        <Setter Property="Margin" Value="-1,0" />
+    </Style>
+    <!-- Bloc blanc bordé, rayon 12 (champs, encarts) -->
+    <Style x:Key="Field" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource White}" />
+        <Setter Property="Stroke" Value="{StaticResource Line}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 12.5" />
+        <Setter Property="Margin" Value="-1,0" />
+    </Style>
+    <!-- Bouton principal plein -->
+    <Style x:Key="PrimaryButton" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource Primary}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+        <Setter Property="HeightRequest" Value="56" />
+    </Style>
+    <!-- Bouton secondaire teinté -->
+    <Style x:Key="TintButton" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource Tint}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+        <Setter Property="HeightRequest" Value="56" />
+    </Style>
+    <!-- Encart teinté rayon 12 (avertissements) -->
+    <Style x:Key="TintPanel" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource Tint}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+    </Style>
+    <!-- Pastille teintée hauteur 27 -->
+    <Style x:Key="Pill" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource Tint}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 13.5" />
+        <Setter Property="HeightRequest" Value="27" />
+        <Setter Property="HorizontalOptions" Value="Start" />
+    </Style>
+    <!-- Pastille blanche bordée -->
+    <Style x:Key="OutlinePill" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource White}" />
+        <Setter Property="Stroke" Value="{StaticResource Line}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 14.5" />
+        <Setter Property="HeightRequest" Value="29" />
+        <Setter Property="HorizontalOptions" Value="Start" />
+    </Style>
+    <!-- Filtre segmenté (44 de haut) : état normal / sélectionné -->
+    <Style x:Key="Segment" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource White}" />
+        <Setter Property="Stroke" Value="{StaticResource Line}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 12.5" />
+        <Setter Property="HeightRequest" Value="46" />
+    </Style>
+    <!-- Vignette photo arrondie -->
+    <Style x:Key="Photo" TargetType="Border">
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+    </Style>
+    <Style TargetType="Image">
+        <Setter Property="Aspect" Value="AspectFill" />
+    </Style>
+
+</ResourceDictionary>

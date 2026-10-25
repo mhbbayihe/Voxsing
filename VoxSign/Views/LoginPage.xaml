@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Écran 1 · Connexion. Marges calculées depuis l'export PDF (largeur 420, marges latérales 28). -->
+<ContentPage
+    x:Class="VoxSign.Views.LoginPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls"
+    xmlns:vm="clr-namespace:VoxSign.ViewModels"
+    x:DataType="vm:LoginViewModel">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="28,0,28,44" Spacing="0" IgnoreSafeArea="True">
+
+            <c:BrandHeader Margin="0,60,0,0" />
+
+            <Border Style="{StaticResource Photo}" StrokeShape="RoundRectangle 20" HeightRequest="180" Margin="0,20,0,0">
+                <Image Source="hero.jpg" SemanticProperties.Description="Deux personnes échangent en souriant" />
+            </Border>
+
+            <Label
+                Text="Se comprendre, simplement."
+                Style="{StaticResource Display}"
+                Margin="0,20.1,0,0"
+                SemanticProperties.HeadingLevel="Level1" />
+            <Label
+                Text="Du texte, de la voix et des signes illustrés pour créer le lien."
+                FontSize="15"
+                TextColor="{StaticResource Muted}"
+                c:Typography.LinePitch="22"
+                Margin="0,7.45,0,0" />
+
+            <!-- Adresse e-mail -->
+            <Label Text="Adresse e-mail" Style="{StaticResource FieldLabel}" Margin="0,21.9,0,0" />
+            <Border Style="{StaticResource Field}" HeightRequest="58" Margin="-1,8.6,-1,0">
+                <Grid>
+                    <c:Icon Name="Mail" Color="{StaticResource Muted}" Margin="17.1,20.8,0,0" />
+                    <Entry
+                        Text="{Binding Email}"
+                        Keyboard="Email"
+                        FontFamily="InterRegular"
+                        FontSize="16"
+                        TextColor="{StaticResource Ink}"
+                        VerticalOptions="Center"
+                        Margin="48,0,16,0"
+                        SemanticProperties.Description="Adresse e-mail" />
+                </Grid>
+            </Border>
+
+            <!-- Mot de passe -->
+            <Label Text="Mot de passe" Style="{StaticResource FieldLabel}" Margin="0,16.45,0,0" />
+            <Border Style="{StaticResource Field}" HeightRequest="58" Margin="-1,8.6,-1,0">
+                <Grid>
+                    <c:Icon Name="Lock" Color="{StaticResource Muted}" Margin="18,19.2,0,0" />
+                    <Entry
+                        Text="{Binding Password}"
+                        IsPassword="{Binding IsPasswordHidden}"
+                        FontFamily="InterRegular"
+                        FontSize="16"
+                        TextColor="{StaticResource Ink}"
+                        VerticalOptions="Center"
+                        Margin="48,0,56,0"
+                        SemanticProperties.Description="Mot de passe" />
+                    <Grid WidthRequest="44" HeightRequest="56" HorizontalOptions="End" SemanticProperties.Description="Afficher le mot de passe">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding TogglePasswordVisibilityCommand}" />
+                        </Grid.GestureRecognizers>
+                        <c:Icon Name="Eye" Color="{StaticResource Muted}" Margin="9.1,21.7,0,0" />
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Label
+                Text="Mot de passe oublié ?"
+                FontFamily="InterSemiBold"
+                FontSize="14"
+                TextColor="{StaticResource Primary}"
+                HorizontalOptions="End"
+                Margin="0,15.45,0,0">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Border Style="{StaticResource PrimaryButton}" Margin="0,19.6,0,0" SemanticProperties.Description="Se connecter">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding SignInCommand}" />
+                </Border.GestureRecognizers>
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                    <c:Icon Name="ArrowRight" Color="{StaticResource White}" VerticalOptions="Center" Margin="3.5,0,0,0" />
+                    <Label Text="Se connecter" Style="{StaticResource ButtonText}" TextColor="{StaticResource White}" Margin="13.9,0,0,0" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <Label FontSize="14" HorizontalOptions="Center" Margin="0,20.45,0,0">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Première visite ? " FontFamily="InterRegular" FontSize="14" TextColor="{StaticResource Muted}" />
+                        <Span Text="Créer un compte" FontFamily="InterRegular" FontSize="14" TextColor="{StaticResource Primary}" />
+                    </FormattedString>
+                </Label.FormattedText>
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CreateAccountCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Border Style="{StaticResource TintButton}" Margin="0,19.6,0,0" SemanticProperties.Description="Explorer sans compte">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ExploreCommand}" />
+                </Border.GestureRecognizers>
+                <Label Text="Explorer sans compte" Style="{StaticResource ButtonText}" TextColor="{StaticResource Primary}" HorizontalOptions="Center" />
+            </Border>
+
+            <Grid Margin="0,20.15,0,0">
+                <c:Icon Name="Shield" Color="{StaticResource Muted}" Margin="2.5,8.85,0,0" />
+                <Label
+                    Text="Votre façon de communiquer vous appartient. Vos échanges restent privés."
+                    Style="{StaticResource Caption}"
+                    Margin="26,0,0,0" />
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

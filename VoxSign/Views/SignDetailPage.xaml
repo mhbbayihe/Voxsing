@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Écran 8 · Fiche d'un repère (Merci). -->
+<ContentPage
+    x:Class="VoxSign.Views.SignDetailPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls"
+    xmlns:vm="clr-namespace:VoxSign.ViewModels"
+    x:DataType="vm:SignDetailViewModel">
+
+    <Grid RowDefinitions="*,Auto" IgnoreSafeArea="True">
+        <ScrollView>
+            <VerticalStackLayout Padding="24,0,24,22" Spacing="0">
+
+                <c:ScreenHeader
+                    Margin="0,61,0,0"
+                    Title="{Binding Sign.Word}"
+                    Subtitle="{Binding Subtitle}"
+                    BackCommand="{Binding GoBackCommand}"
+                    ActionIcon="ShareSmall"
+                    ActionText="Partager"
+                    ActionCommand="{Binding ShareCommand}" />
+
+                <!-- Pastilles blanches sans contour -->
+                <HorizontalStackLayout Spacing="8" Margin="0,25,0,0">
+                    <Border Style="{StaticResource Pill}" Background="{StaticResource White}">
+                        <HorizontalStackLayout Spacing="0">
+                            <c:Icon Name="HandSmall" Color="{StaticResource Primary}" Margin="10.6,7.2,0,0" />
+                            <Label Text="LSF" Style="{StaticResource ChipText}" Margin="6.7,0,10.4,0" />
+                        </HorizontalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource Pill}" Background="{StaticResource White}" IsVisible="{Binding Sign.IsFavorite}">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ToggleFavoriteCommand}" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="0">
+                            <c:Icon Name="BookmarkCheckSmall" Color="{StaticResource Primary}" Margin="12.4,7.8,0,0" />
+                            <Label Text="Dans vos favoris" Style="{StaticResource ChipText}" Margin="8.4,0,10.7,0" />
+                        </HorizontalStackLayout>
+                    </Border>
+                    <Border Style="{StaticResource Pill}" Background="{StaticResource White}" IsVisible="{Binding Sign.IsOffline}">
+                        <HorizontalStackLayout Spacing="0">
+                            <c:Icon Name="DownloadSmall" Color="{StaticResource Primary}" Margin="11.2,7.8,0,0" />
+                            <Label Text="Hors ligne" Style="{StaticResource ChipText}" Margin="7.3,0,10.3,0" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <Border Style="{StaticResource Photo}" HeightRequest="208" Margin="0,16,0,0">
+                    <Image Source="{Binding Sign.Image}" SemanticProperties.Description="{Binding Sign.Word}" />
+                </Border>
+
+                <Label Text="{Binding Sign.Usage}" Style="{StaticResource Section}" Margin="0,16.55,0,0" SemanticProperties.HeadingLevel="Level2" />
+                <Label
+                    Text="{Binding Sign.UsageDescription}"
+                    FontSize="15"
+                    TextColor="{StaticResource Muted}"
+                    c:Typography.LinePitch="22"
+                    Margin="0,5.2,0,0" />
+
+                <!-- Ce qu'il faut observer -->
+                <Border Style="{StaticResource Card}" Margin="-1,15.45,-1,0">
+                    <VerticalStackLayout Padding="16,17.5,16,15.85" Spacing="0">
+                        <Label Text="Ce qu’il faut observer" FontSize="16" />
+                        <Grid Margin="0,15.55,0,0">
+                            <c:Icon Name="HandMedium" Color="{StaticResource Primary}" Margin="0.9,0.1,0,0" />
+                            <Label Text="La position et l’orientation des mains" FontSize="13" Margin="28,0,0,0" />
+                        </Grid>
+                        <!-- Rangées espacées de 31 (hauteur de rangée = icône de 16 à 16,4) -->
+                        <Grid Margin="0,14.9,0,0">
+                            <c:Icon Name="Move" Color="{StaticResource Primary}" Margin="0.8,-0.1,0,0" />
+                            <Label Text="Le mouvement, son trajet et son rythme" FontSize="13" Margin="28,0,0,0" />
+                        </Grid>
+                        <Grid Margin="0,14.7,0,0">
+                            <c:Icon Name="Smile" Color="{StaticResource Primary}" Margin="1,0.1,0,0" />
+                            <Label Text="L’expression du visage et le regard" FontSize="13" Margin="28,0,0,0" />
+                        </Grid>
+                        <Label
+                            Text="Pour apprendre le geste exact, faites-vous accompagner par une personne compétente en LSF."
+                            Style="{StaticResource Caption}"
+                            Margin="0,13.65,0,0" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Exemple -->
+                <Border Style="{StaticResource Field}" Margin="-1,14,-1,0">
+                    <VerticalStackLayout Padding="14,14.4,14,16.1" Spacing="0">
+                        <Label Text="DANS UN ÉCHANGE" FontFamily="InterSemiBold" FontSize="12" TextColor="{StaticResource Primary}" />
+                        <Label Text="{Binding Sign.Example}" FontSize="16" Margin="0,5.6,0,0" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource Field}" HeightRequest="58" Margin="-1,14,-1,0" SemanticProperties.Description="{Binding ReadLabel}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ReadWordCommand}" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                        <c:Icon Name="Volume" Color="{StaticResource Primary}" VerticalOptions="Center" Margin="1.1,0,0,0" />
+                        <Label Text="{Binding ReadLabel}" Style="{StaticResource ButtonText}" Margin="11.4,0,0,0" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <c:InfoNote Variant="OutlineMuted" Margin="0,14,0,0" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <c:BottomNav Grid.Row="1" Active="Dictionnaire" Variant="OutlinedNeutral" Command="{Binding NavigateTabCommand}" />
+    </Grid>
+</ContentPage>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Écran 2 · Inscription (marges latérales 28). -->
+<ContentPage
+    x:Class="VoxSign.Views.RegisterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls"
+    xmlns:vm="clr-namespace:VoxSign.ViewModels"
+    x:DataType="vm:RegisterViewModel">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="28,0,28,43.85" Spacing="0" IgnoreSafeArea="True">
+
+            <c:BrandHeader Margin="0,60,0,0" />
+
+            <Label Text="Créons le lien." Style="{StaticResource Display}" Margin="0,21.1,0,0" SemanticProperties.HeadingLevel="Level1" />
+            <Label
+                Text="Un compte pour retrouver vos favoris et échanger avec vos proches."
+                FontSize="16"
+                TextColor="{StaticResource Muted}"
+                c:Typography.LinePitch="23"
+                Margin="0,8.6,0,0" />
+
+            <Border Style="{StaticResource Pill}" Margin="0,20.3,0,0">
+                <HorizontalStackLayout Spacing="0">
+                    <c:Icon Name="HandHeartSmall" Color="{StaticResource Primary}" Margin="10.6,7.7,0,0" />
+                    <Label Text="Bienvenue dans VoxSign" Style="{StaticResource ChipText}" Margin="6.7,0,10.6,0" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- Prénom -->
+            <Label Text="Prénom" Style="{StaticResource FieldLabel}" Margin="0,21.45,0,0" />
+            <Border Style="{StaticResource Field}" HeightRequest="58" Margin="-1,8.6,-1,0">
+                <Grid>
+                    <c:Icon Name="User" Color="{StaticResource Muted}" Margin="18.8,20,0,0" />
+                    <Entry Text="{Binding FirstName}" FontFamily="InterRegular" FontSize="16" TextColor="{StaticResource Ink}"
+                           VerticalOptions="Center" Margin="48,0,16,0" SemanticProperties.Description="Prénom" />
+                </Grid>
+            </Border>
+
+            <!-- Adresse e-mail -->
+            <Label Text="Adresse e-mail" Style="{StaticResource FieldLabel}" Margin="0,16.45,0,0" />
+            <Border Style="{StaticResource Field}" HeightRequest="58" Margin="-1,8.6,-1,0">
+                <Grid>
+                    <c:Icon Name="Mail" Color="{StaticResource Muted}" Margin="17.1,20.8,0,0" />
+                    <Entry Text="{Binding Email}" Keyboard="Email" FontFamily="InterRegular" FontSize="16" TextColor="{StaticResource Ink}"
+                           VerticalOptions="Center" Margin="48,0,16,0" SemanticProperties.Description="Adresse e-mail" />
+                </Grid>
+            </Border>
+
+            <!-- Mot de passe -->
+            <Label Text="Mot de passe" Style="{StaticResource FieldLabel}" Margin="0,16.45,0,0" />
+            <Border Style="{StaticResource Field}" HeightRequest="58" Margin="-1,8.6,-1,0">
+                <Grid>
+                    <c:Icon Name="Lock" Color="{StaticResource Muted}" Margin="18,19.2,0,0" />
+                    <Entry Text="{Binding Password}" IsPassword="{Binding IsPasswordHidden}" FontFamily="InterRegular" FontSize="16"
+                           TextColor="{StaticResource Ink}" VerticalOptions="Center" Margin="48,0,56,0" SemanticProperties.Description="Mot de passe" />
+                    <Grid WidthRequest="44" HeightRequest="56" HorizontalOptions="End" SemanticProperties.Description="Afficher le mot de passe">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding TogglePasswordVisibilityCommand}" />
+                        </Grid.GestureRecognizers>
+                        <c:Icon Name="Eye" Color="{StaticResource Muted}" Margin="9.1,21.7,0,0" />
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Grid Margin="0,16.4,0,0">
+                <c:Icon Name="CheckCircleSmall" Color="{StaticResource Success}" Margin="0.8,-0.6,0,0" />
+                <Label Text="{Binding PasswordHint}" FontSize="12" TextColor="{StaticResource Success}" Margin="24,0,0,0" />
+            </Grid>
+
+            <!-- Langue des signes -->
+            <Label Text="Votre langue des signes" Style="{StaticResource FieldLabel}" Margin="0,22.55,0,0" />
+            <Border Style="{StaticResource TintButton}" Margin="0,9.6,0,0" SemanticProperties.Description="Choisir votre langue des signes">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ChooseSignLanguageCommand}" />
+                </Border.GestureRecognizers>
+                <Grid>
+                    <c:Icon Name="Hand" Color="{StaticResource Primary}" Margin="17.2,18.3,0,0" />
+                    <Label Text="{Binding SignLanguage}" FontSize="15" VerticalOptions="Center" LineBreakMode="TailTruncation" Margin="50,0,48,0" />
+                    <c:Icon Name="ChevronDown" Color="{StaticResource Primary}" Margin="334,25.2,0,0" />
+                </Grid>
+            </Border>
+
+            <!-- Conditions -->
+            <Grid Margin="0,20,0,0">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding ToggleTermsCommand}" />
+                </Grid.GestureRecognizers>
+                <Border
+                    WidthRequest="24"
+                    HeightRequest="24"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Start"
+                    StrokeShape="RoundRectangle 6"
+                    Stroke="{StaticResource Primary}"
+                    StrokeThickness="0"
+                    Background="{StaticResource Primary}"
+                    SemanticProperties.Description="J’accepte les conditions">
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding AcceptsTerms}" Value="False">
+                            <Setter Property="Background" Value="{StaticResource White}" />
+                            <Setter Property="StrokeThickness" Value="1.5" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                    <c:Icon Name="Check" Color="{StaticResource White}" Margin="5.5,7,0,0" IsVisible="{Binding AcceptsTerms}" />
+                </Border>
+                <Label
+                    Text="J’accepte les conditions d’utilisation et la politique de confidentialité."
+                    FontSize="13"
+                    TextColor="{StaticResource Muted}"
+                    c:Typography.LinePitch="19"
+                    Margin="36,-0.25,-2,0" />
+            </Grid>
+
+            <Border Style="{StaticResource PrimaryButton}" Margin="0,20.25,0,0" SemanticProperties.Description="Créer mon compte">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CreateAccountCommand}" />
+                </Border.GestureRecognizers>
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                    <c:Icon Name="ArrowRight" Color="{StaticResource White}" VerticalOptions="Center" Margin="3.9,0,0,0" />
+                    <Label Text="Créer mon compte" Style="{StaticResource ButtonText}" TextColor="{StaticResource White}" Margin="13.9,0,0,0" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <Label Text="Déjà un compte ? Se connecter" FontSize="14" TextColor="{StaticResource Primary}" HorizontalOptions="Center" Margin="0,21.45,0,0">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoToLoginCommand}" />
+                </Label.GestureRecognizers>
+            </Label>
+
+            <Label
+                Text="Illustrations pédagogiques : un appui pour communiquer, pas une traduction LSF certifiée."
+                Style="{StaticResource Caption}"
+                HorizontalTextAlignment="Center"
+                Margin="0,21.75,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

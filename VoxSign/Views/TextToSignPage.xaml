@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Écran 4 · Texte → signes. -->
+<ContentPage
+    x:Class="VoxSign.Views.TextToSignPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:c="clr-namespace:VoxSign.Controls"
+    xmlns:m="clr-namespace:VoxSign.Models"
+    xmlns:vm="clr-namespace:VoxSign.ViewModels"
+    x:DataType="vm:TextToSignViewModel">
+
+    <Grid RowDefinitions="*,Auto" IgnoreSafeArea="True">
+        <ScrollView>
+            <VerticalStackLayout Padding="24,0,24,23" Spacing="0">
+
+                <c:ScreenHeader
+                    Margin="0,61,0,0"
+                    Title="Texte → signes"
+                    Subtitle="Écrire pour échanger · LSF"
+                    BackCommand="{Binding GoBackCommand}"
+                    ActionIcon="Dots"
+                    ActionText="Options"
+                    ActionFrameStyle="Square" />
+
+                <!-- Langues -->
+                <HorizontalStackLayout Spacing="0" Margin="0,25,0,0">
+                    <Border Style="{StaticResource Pill}" Padding="10,0">
+                        <Label Text="Français" Style="{StaticResource ChipText}" />
+                    </Border>
+                    <c:Icon Name="ArrowRightSmall" Color="{StaticResource Muted}" Margin="11.2,7.7,0,0" />
+                    <Border Style="{StaticResource Pill}" Margin="11.1,0,0,0">
+                        <HorizontalStackLayout Spacing="0">
+                            <c:Icon Name="HandSmall" Color="{StaticResource Primary}" Margin="10.6,7.2,0,0" />
+                            <Label Text="LSF illustrée" Style="{StaticResource ChipText}" Margin="6.7,0,10.9,0" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <Label Text="Votre message" FontSize="16" Margin="0,17.5,0,0" />
+
+                <!-- Zone de saisie (contour violet de 1,5) -->
+                <Border
+                    Background="{StaticResource White}"
+                    Stroke="{StaticResource Primary}"
+                    StrokeThickness="1.5"
+                    StrokeShape="RoundRectangle 20.75"
+                    HeightRequest="153"
+                    Margin="-1.5,8.6,-1.5,0">
+                    <Grid>
+                        <Editor
+                            Text="{Binding Message}"
+                            MaxLength="{x:Static vm:TextToSignViewModel.MaxLength}"
+                            FontFamily="InterRegular"
+                            FontSize="22"
+                            TextColor="{StaticResource Ink}"
+                            Placeholder="Écrivez votre message…"
+                            PlaceholderColor="{StaticResource Muted}"
+                            HeightRequest="62"
+                            c:Typography.LinePitch="31"
+                            VerticalOptions="Start"
+                            Margin="18,20.7,18,0"
+                            SemanticProperties.Description="Votre message" />
+                        <Label Text="{Binding CharacterCount}" FontSize="12" TextColor="{StaticResource Muted}" Margin="18,96.4,0,0" />
+                        <Label
+                            Text="Effacer"
+                            FontFamily="InterSemiBold"
+                            FontSize="13"
+                            TextColor="{StaticResource Primary}"
+                            HorizontalOptions="End"
+                            VerticalOptions="Start"
+                            Margin="0,96.4,18.7,0">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ClearCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
+                </Border>
+
+                <Border Style="{StaticResource PrimaryButton}" Margin="0,14.5,0,0" SemanticProperties.Description="Illustrer en LSF">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding IllustrateCommand}" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                        <c:Icon Name="Hand" Color="{StaticResource White}" VerticalOptions="Center" Margin="0.6,0,0,0" />
+                        <Label Text="Illustrer en LSF" Style="{StaticResource ButtonText}" TextColor="{StaticResource White}" Margin="11.4,0,0,0" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Border Style="{StaticResource TintButton}" Margin="0,16,0,0" SemanticProperties.Description="Lire à voix haute">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ReadAloudCommand}" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                        <c:Icon Name="Volume" Color="{StaticResource Primary}" VerticalOptions="Center" Margin="0.9,0,0,0" />
+                        <Label Text="Lire à voix haute" Style="{StaticResource ButtonText}" TextColor="{StaticResource Primary}" Margin="11.4,0,0,0" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Label Text="Synthèse vocale · français · vitesse normale" FontSize="12" TextColor="{StaticResource Muted}" HorizontalOptions="Center" Margin="0,8.4,0,0" />
+
+                <!-- Aperçu -->
+                <Grid Margin="0,17.65,0,0">
+                    <Label Text="Aperçu des repères" Style="{StaticResource Section}" SemanticProperties.HeadingLevel="Level2" />
+                    <Label Text="Voir la séquence" Style="{StaticResource SectionLink}" VerticalOptions="Start" Margin="0,2.85,0,0">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding OpenSequenceCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+
+                <c:UniformGrid Columns="3" ColumnSpacing="8" Margin="0,15.65,0,0" BindableLayout.ItemsSource="{Binding Preview}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="m:Sign">
+                            <VerticalStackLayout Spacing="0">
+                                <Border Style="{StaticResource Photo}" HeightRequest="84">
+                                    <Image Source="{Binding Image}" SemanticProperties.Description="{Binding Word}" />
+                                </Border>
+                                <Label Text="{Binding Word}" FontFamily="InterSemiBold" FontSize="12" HorizontalOptions="Center" LineBreakMode="NoWrap" Margin="0,7.4,0,0" />
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </c:UniformGrid>
+
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="0" Margin="0,32.05,0,0">
+                    <HorizontalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AddToFavoritesCommand}" />
+                    </HorizontalStackLayout.GestureRecognizers>
+                    <c:Icon Name="Heart" Color="{StaticResource Primary}" Margin="0,0.05,0,0" />
+                    <Label Text="Ajouter cette phrase aux favoris" FontFamily="InterSemiBold" FontSize="14" TextColor="{StaticResource Primary}" Margin="11.4,0,0,0" />
+                </HorizontalStackLayout>
+
+                <c:InfoNote Margin="0,31.1,0,0" />
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <c:BottomNav Grid.Row="1" Active="Accueil" Variant="Tinted" Command="{Binding NavigateTabCommand}" />
+    </Grid>
+</ContentPage>
